@@ -1,9 +1,11 @@
+# -*- encoding: utf-8 -*-
+
 Gem::Specification.new do |s|
   s.name        = 'fluent-plugin-logdna'
   s.version     = '0.0.0'
   s.date        = '2016-10-20'
-  s.summary     = "LogDNA plugin for Fluentd"
-  s.description = "This is the LogDNA plugin for Fluentd."
+  s.summary     = 'LogDNA plugin for Fluentd'
+  s.description = 'Fluentd plugin for supplying output to LogDNA.'
   s.authors     = ["Edwin Lai"]
   s.email       = 'edwin@logdna.com'
   s.files       = ["lib/fluent/plugin/out_logdna.rb"]
