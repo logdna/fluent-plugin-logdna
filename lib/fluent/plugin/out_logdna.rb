@@ -35,7 +35,6 @@ module Fluent
     end
 
     def write(chunk)
-      print @api_key, @hostname, @mac, @ip, @app
       body = chunk_to_body(chunk)
       response = send_request(body)
       handle(response)
@@ -51,8 +50,6 @@ module Fluent
         data << line
       end
 
-      print data
-
       data
     end
 
@@ -67,8 +64,8 @@ module Fluent
     end
 
     def handle(response)
-      if response.code >= 400
-        print 'Error connecting to LogDNA ingester. Check hostname.\n'
+      if response.status == 'error'
+        print "Error connecting to LogDNA ingester. \n"
         print "Details: #{response}"
       else
         print "Success! #{response}"
@@ -80,6 +77,7 @@ module Fluent
     def send_request(body)
       now = Time.now.to_i
       url = "#{@ingest_dir}?hostname=#{@host}&mac=#{@mac}&ip=#{@ip}&now=#{now}"
+      print url + "\n"
       @ingester.headers(apikey: @api_key,
                         content_type: 'application/json; charset=UTF-8')
                .post(url, body: JSON.generate(body))
