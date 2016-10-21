@@ -15,12 +15,12 @@ module Fluent
 
     def configure(conf)
       super
+      @conf = conf
       @api_key = conf['api_key']
       @hostname = conf['hostname']
       @mac = conf['mac']
       @ip = conf['ip']
       @app = conf['app']
-      print conf
     end
 
     def start
@@ -40,6 +40,7 @@ module Fluent
     end
 
     def write(chunk)
+      print @conf, @api_key, @hostname, @mac, @ip, @app
       body = chunk_to_body(chunk)
       response = send_request(body)
       handle(response)
@@ -55,6 +56,8 @@ module Fluent
         line[:app] = @app if @app
         data << line
       end
+
+      print data
 
       data
     end
