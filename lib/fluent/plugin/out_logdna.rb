@@ -5,7 +5,6 @@ module Fluent
     Fluent::Plugin.register_output('logdna', self)
 
     INGESTER_DOMAIN = 'https://logs.logdna.com'.freeze
-    @ingest_dir = '/logs/ingest'
 
     config_param :api_key, :string
     config_param :hostname, :string
@@ -23,6 +22,7 @@ module Fluent
       require 'json'
       require 'http'
       @ingester = HTTP.persistent INGESTER_DOMAIN
+      @ingest_dir = '/logs/ingest'
     end
 
     def shutdown
@@ -64,7 +64,7 @@ module Fluent
     end
 
     def handle(response)
-      if response.status == 'error'
+      if response['error']
         print "Error connecting to LogDNA ingester. \n"
         print "Details: #{response}"
       else
