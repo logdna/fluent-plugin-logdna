@@ -5,7 +5,7 @@ module Fluent
     Fluent::Plugin.register_output('logdna', self)
 
     INGESTER_DOMAIN = 'https://logs.logdna.com'.freeze
-    INGESTER_URL = '/logs/ingest'.freeze
+    @ingest_dir = '/logs/ingest'
 
     config_param :api_key, :string
     config_param :hostname, :string
@@ -15,12 +15,7 @@ module Fluent
 
     def configure(conf)
       super
-      @conf = conf
-      @api_key = conf['api_key']
-      @hostname = conf['hostname']
-      @mac = conf['mac']
-      @ip = conf['ip']
-      @app = conf['app']
+      @host = conf['hostname']
     end
 
     def start
@@ -40,7 +35,7 @@ module Fluent
     end
 
     def write(chunk)
-      print @conf, @api_key, @hostname, @mac, @ip, @app
+      print @api_key, @hostname, @mac, @ip, @app
       body = chunk_to_body(chunk)
       response = send_request(body)
       handle(response)
@@ -52,14 +47,23 @@ module Fluent
       data = []
 
       chunk.msgpack_each do |(tag, time, record)|
-        line = { level: tag, timestamp: time, line: record }
-        line[:app] = @app if @app
+        line = gather_line_data(tag, time, record)
         data << line
       end
 
       print data
 
       data
+    end
+
+    def gather_line_data(tag, time, record)
+      line = {
+        level: tag.split('.').last,
+        timestamp: time,
+        line: JSON.generate(record)
+      }
+      line[:app] = @app if @app
+      line
     end
 
     def handle(response)
@@ -74,16 +78,11 @@ module Fluent
     end
 
     def send_request(body)
+      now = Time.now.to_i
+      url = "#{@ingest_dir}?hostname=#{@host}&mac=#{@mac}&ip=#{@ip}&now=#{now}"
       @ingester.headers(apikey: @api_key,
                         content_type: 'application/json; charset=UTF-8')
-               .post(INGESTER_URL,
-                     params: {
-                       hostname: @hostname,
-                       mac: @mac,
-                       ip: @ip,
-                       now: Time.now.to_i
-                     },
-                     body: JSON.generate(body))
+               .post(url, body: JSON.generate(body))
     end
   end
 end
