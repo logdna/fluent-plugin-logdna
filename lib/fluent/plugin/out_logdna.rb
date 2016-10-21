@@ -1,13 +1,11 @@
-require 'json'
 require 'fluent/output'
-require 'http'
 
 module Fluent
-  class LogDNAOutput < BufferedOutput
+  class LogDNAOutput < Fluent::BufferedOutput
+    Fluent::Plugin.register_output('logdna', self)
+
     INGESTER_DOMAIN = 'https://logs.logdna.com'.freeze
     INGESTER_URL = '/logs/ingest'.freeze
-
-    Fluent::Plugin.register_output('logdna', self)
 
     config_param :api_key, :string
     config_param :hostname, :string
@@ -21,6 +19,8 @@ module Fluent
 
     def start
       super
+      require 'json'
+      require 'http'
       @ingester = HTTP.persistent INGESTER_DOMAIN
     end
 
@@ -63,8 +63,8 @@ module Fluent
     end
 
     def send_request(body)
-      @ingester.basic_auth(apikey: @api_key)
-               .headers(content_type: 'application/json; charset=UTF-8')
+      @ingester.headers(apikey: @api_key,
+                        content_type: 'application/json; charset=UTF-8')
                .post(INGESTER_URL,
                      params: {
                        hostname: @hostname,
