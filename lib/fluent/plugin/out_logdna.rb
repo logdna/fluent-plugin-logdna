@@ -15,6 +15,12 @@ module Fluent
 
     def configure(conf)
       super
+      @api_key = conf['api_key']
+      @hostname = conf['hostname']
+      @mac = conf['mac']
+      @ip = conf['ip']
+      @app = conf['app']
+      print conf
     end
 
     def start
@@ -57,6 +63,8 @@ module Fluent
       if response.code >= 400
         print 'Error connecting to LogDNA ingester. Check hostname.\n'
         print "Details: #{response}"
+      else
+        print "Success! #{response}"
       end
 
       response.flush
