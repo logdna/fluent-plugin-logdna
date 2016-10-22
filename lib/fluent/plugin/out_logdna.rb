@@ -20,9 +20,9 @@ module Fluent
     def start
       super
       require 'json'
+      require 'base64'
       require 'http'
       @ingester = HTTP.persistent INGESTER_DOMAIN
-      @ingest_dir = '/logs/ingest'
     end
 
     def shutdown
@@ -50,21 +50,21 @@ module Fluent
         data << line
       end
 
-      data
+      { lines: data }
     end
 
     def gather_line_data(tag, time, record)
       line = {
         level: tag.split('.').last,
         timestamp: time,
-        line: JSON.generate(record)
+        line: record['message']
       }
       line[:app] = @app if @app
       line
     end
 
     def handle(response)
-      if response['error']
+      if response.code >= 400
         print "Error connecting to LogDNA ingester. \n"
         print "Details: #{response}"
       else
@@ -76,11 +76,10 @@ module Fluent
 
     def send_request(body)
       now = Time.now.to_i
-      url = "#{@ingest_dir}?hostname=#{@host}&mac=#{@mac}&ip=#{@ip}&now=#{now}"
-      print url + "\n"
-      @ingester.headers(apikey: @api_key,
-                        content_type: 'application/json; charset=UTF-8')
-               .post(url, body: JSON.generate(body))
+      url = "/logs/ingest?hostname=#{@host}&mac=#{@mac}&ip=#{@ip}&now=#{now}"
+      @ingester.headers('apikey' => @api_key,
+                        'content-type' => 'application/json')
+               .post(url, json: body)
     end
   end
 end
