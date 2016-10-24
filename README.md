@@ -1,5 +1,7 @@
 # fluent-plugin-logdna
 
+[![Gem Version](https://badge.fury.io/rb/fluent-plugin-logdna.svg)](https://badge.fury.io/rb/fluent-plugin-logdna)
+
 Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to LogDNA.
 
 ## Instructions
