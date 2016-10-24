@@ -14,8 +14,8 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
 ~~~~~
 <match your_match>
   type logdna
-  api_key d942fed2d0a65b0181e49ae3307465dd # paste your api key here (required)
-  hostname GitHub                          # replace with your hostname (required)
+  api_key xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx # paste your api key here (required)
+  hostname my_host                         # replace with your hostname (required)
   mac C0:FF:EE:C0:FF:EE                    # replace with host mac address
   ip 127.0.0.1                             # replace with host ip address
   app my_app                               # replace with your app name
