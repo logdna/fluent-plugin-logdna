@@ -21,6 +21,7 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
   app my_app                               # replace with your app name
 </match>
 ~~~~~
+* Restart fluentd to pick up the configuration changes.
 
 For advanced configuration options, refer to the [buffered output parameters documentation.](http://docs.fluentd.org/articles/output-plugin-overview#buffered-output-parameters)
 
