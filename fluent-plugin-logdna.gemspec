@@ -2,8 +2,8 @@
 
 Gem::Specification.new do |s|
   s.name        = 'fluent-plugin-logdna'
-  s.version     = '0.1.0'
-  s.date        = '2016-10-20'
+  s.version     = '0.1.1'
+  s.date        = '2017-03-08'
   s.summary     = 'LogDNA plugin for Fluentd'
   s.description = 'Fluentd plugin for supplying output to LogDNA.'
   s.authors     = ['Edwin Lai']
