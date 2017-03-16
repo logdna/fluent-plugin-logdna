@@ -59,7 +59,9 @@ module Fluent
         timestamp: time,
         line: record['message'] || record.to_json
       }
-      line[:app] = @app if @app
+      line[:app] = record['_app'] || record['app']
+      line[:app] ||= @app if @app
+      line.delete(:app) if line[:app].nil?
       line
     end
 
