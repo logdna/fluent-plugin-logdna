@@ -27,7 +27,7 @@ module Fluent
 
     def shutdown
       super
-      ingester.close if ingester
+      @ingester.close if @ingester
     end
 
     def format(tag, time, record)
