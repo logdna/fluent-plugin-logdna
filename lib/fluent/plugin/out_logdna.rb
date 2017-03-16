@@ -55,7 +55,7 @@ module Fluent
 
     def gather_line_data(tag, time, record)
       line = {
-        level: record['level'] || tag.split('.').last,
+        level: record['level'] || record['severity'] || tag.split('.').last,
         timestamp: time,
         line: record['message'] || record.to_json
       }
