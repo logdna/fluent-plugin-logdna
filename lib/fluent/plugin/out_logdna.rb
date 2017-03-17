@@ -6,7 +6,7 @@ module Fluent
 
     INGESTER_DOMAIN = 'https://logs.logdna.com'.freeze
 
-    config_param :api_key, :string
+    config_param :api_key, :string, secret: true
     config_param :hostname, :string
     config_param :mac, :string, default: nil
     config_param :ip, :string, default: nil
