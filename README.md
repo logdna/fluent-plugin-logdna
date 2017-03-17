@@ -13,7 +13,7 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
 
 ~~~~~
 <match your_match>
-  type logdna
+  @type logdna
   api_key xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx # paste your api key here (required)
   hostname my_host                         # replace with your hostname (required)
   mac C0:FF:EE:C0:FF:EE                    # replace with host mac address
