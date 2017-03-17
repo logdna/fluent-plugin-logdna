@@ -19,6 +19,7 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
   mac C0:FF:EE:C0:FF:EE                    # replace with host mac address
   ip 127.0.0.1                             # replace with host ip address
   app my_app                               # replace with your app name
+  level_field severity                     # replace with field in record
 </match>
 ~~~~~
 * Restart fluentd to pick up the configuration changes.
