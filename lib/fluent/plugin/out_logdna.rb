@@ -11,6 +11,7 @@ module Fluent
     config_param :mac, :string, default: nil
     config_param :ip, :string, default: nil
     config_param :app, :string, default: nil
+    config_param :level_field, :string, default: 'level'
 
     def configure(conf)
       super
@@ -55,9 +56,9 @@ module Fluent
 
     def gather_line_data(tag, time, record)
       line = {
-        level: record['level'] || record['severity'] || tag.split('.').last,
+        level: record[@level_field] || info,
         timestamp: time,
-        line: record['message'] || record.to_json
+        line: record.to_json
       }
       line[:app] = record['_app'] || record['app']
       line[:app] ||= @app if @app
