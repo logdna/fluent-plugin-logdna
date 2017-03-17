@@ -58,7 +58,7 @@ module Fluent
       line = {
         level: record[@level_field] || info,
         timestamp: time,
-        line: record['message'] || record.to_json
+        line: record.to_json
       }
       line[:app] = record['_app'] || record['app']
       line[:app] ||= @app if @app
