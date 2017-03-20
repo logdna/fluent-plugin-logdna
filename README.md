@@ -13,14 +13,27 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
 ~~~~~
 <match your_match>
   @type logdna
-  api_key xxxxxxxxxxxxxxxxxxxxxxxxxxx # paste your api key here (required)
-  hostname "#{Socket.gethostname}"    # your hostname (required)
-  app my_app                          # replace with your app name
-  #mac C0:FF:EE:C0:FF:EE              # optional mac address
-  #ip 127.0.0.1                       # optional ip address
+  api_key xxxxxxxxxxxxxxxxxxxxxxxxxxx        # paste your api key here (required)
+  hostname "#{Socket.gethostname}"           # your hostname (required)
+  app my_app                                 # replace with your app name
+  #mac C0:FF:EE:C0:FF:EE                     # optional mac address
+  #ip 127.0.0.1                              # optional ip address
+  buffer_chunk_limit 1m                      # do not increase past 10m or your logs will be rejected by our server.
+  flush_at_shutdown true                     # only needed with file buffer
 </match>
 ~~~~~
 * Restart fluentd to pick up the configuration changes.
+
+### Recommended Configuration Parameters
+
+* buffer_type
+  - We recommend setting this to memory for development and file for production (file setting requires a buffer_path).
+* buffer_queue_limit, buffer_chunk_limit
+  - We do not recommend increasing buffer_chunk_limit past 10MB.
+* flush_interval
+  - Default is 60s. We recommend keeping this well above 5s.
+* retry_wait, max_retry_wait, retry_limit, disable_retry_limit
+  - We recommend increasing these values if you are encountering problems.
 
 ### Options
 
@@ -41,6 +54,6 @@ Our [paid plans](https://logdna.com/#pricing) start at $1.25/GB per month, pay f
 
 ## Additional Options
 
-For advanced configuration options, refer to the [buffered output parameters documentation.](http://docs.fluentd.org/articles/output-plugin-overview#buffered-output-parameters)
+For advanced configuration options, please refer to the [buffered output parameters documentation.](http://docs.fluentd.org/articles/output-plugin-overview#buffered-output-parameters)
 
 Questions or concerns? Contact [support@logdna.com](mailto:support@logdna.com).

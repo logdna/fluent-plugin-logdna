@@ -5,6 +5,7 @@ module Fluent
     Fluent::Plugin.register_output('logdna', self)
 
     INGESTER_DOMAIN = 'https://logs.logdna.com'.freeze
+    MAX_RETRIES = 5
 
     config_param :api_key, :string, secret: true
     config_param :hostname, :string
@@ -22,7 +23,9 @@ module Fluent
       require 'json'
       require 'base64'
       require 'http'
+      HTTP.default_options = { :keep_alive_timeout => 60 }
       @ingester = HTTP.persistent INGESTER_DOMAIN
+      @requests = Queue.new
     end
 
     def shutdown
@@ -37,7 +40,8 @@ module Fluent
     def write(chunk)
       body = chunk_to_body(chunk)
       response = send_request(body)
-      handle(response)
+      raise 'Encountered server error' if response.code >= 400
+      response.flush
     end
 
     private
@@ -63,17 +67,6 @@ module Fluent
       line[:app] ||= @app if @app
       line.delete(:app) if line[:app].nil?
       line
-    end
-
-    def handle(response)
-      if response.code >= 400
-        print "Error connecting to LogDNA ingester. \n"
-        print "Details: #{response}"
-      else
-        print "Success! #{response}"
-      end
-
-      response.flush
     end
 
     def send_request(body)
