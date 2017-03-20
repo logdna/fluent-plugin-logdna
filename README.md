@@ -18,7 +18,7 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
   app my_app                                 # replace with your app name
   #mac C0:FF:EE:C0:FF:EE                     # optional mac address
   #ip 127.0.0.1                              # optional ip address
-  buffer_chunk_limit 1m                      # do not increase past 10m or your logs will be rejected by our server.
+  buffer_chunk_limit 1m                      # do not increase past 10m (10MB) or your logs will be rejected by our server.
   flush_at_shutdown true                     # only needed with file buffer
 </match>
 ~~~~~
