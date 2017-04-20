@@ -51,7 +51,7 @@ module Fluent
 
       chunk.msgpack_each do |(tag, time, record)|
         line = gather_line_data(tag, time, record)
-        data << line
+        data << line unless line[:line].empty?
       end
 
       { lines: data }
