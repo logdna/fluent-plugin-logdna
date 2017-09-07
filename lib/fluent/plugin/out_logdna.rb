@@ -20,7 +20,7 @@ module Fluent
 
     def start
       super
-      require 'json'
+      require 'yajl'
       require 'base64'
       require 'http'
       HTTP.default_options = { :keep_alive_timeout => 60 }
@@ -61,7 +61,7 @@ module Fluent
       line = {
         level: record['level'] || record['severity'] || tag.split('.').last,
         timestamp: time,
-        line: record['message'] || record.to_json
+        line: record['message'] || Yajl.dump(record)
       }
       line[:app] = record['_app'] || record['app']
       line[:app] ||= @app if @app
