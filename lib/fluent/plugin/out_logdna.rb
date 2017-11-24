@@ -61,11 +61,15 @@ module Fluent
       line = {
         level: record['level'] || record['severity'] || tag.split('.').last,
         timestamp: time,
+        meta: record['meta'],
         line: record['message'] || record.to_json
       }
       line[:app] = record['_app'] || record['app']
       line[:app] ||= @app if @app
       line.delete(:app) if line[:app].nil?
+      line[:meta] = record['meta']
+      line[:meta] ||= @meta if @meta
+      line.delete(:meta) if line[:meta].nil?
       line
     end
 
