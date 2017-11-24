@@ -61,7 +61,6 @@ module Fluent
       line = {
         level: record['level'] || record['severity'] || tag.split('.').last,
         timestamp: time,
-        meta: record['meta'],
         line: record['message'] || record.to_json
       }
       line[:app] = record['_app'] || record['app']
