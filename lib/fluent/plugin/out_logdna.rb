@@ -67,7 +67,6 @@ module Fluent
       line[:app] ||= @app if @app
       line.delete(:app) if line[:app].nil?
       line[:meta] = record['meta']
-      line[:meta] ||= @meta if @meta
       line.delete(:meta) if line[:meta].nil?
       line
     end
