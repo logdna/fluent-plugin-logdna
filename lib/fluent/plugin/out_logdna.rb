@@ -11,6 +11,7 @@ module Fluent
     config_param :mac, :string, default: nil
     config_param :ip, :string, default: nil
     config_param :app, :string, default: nil
+    config_param :file, :string, default: nil
     config_param :ingester_domain, :string, default: 'https://logs.logdna.com'
 
     def configure(conf)
@@ -63,9 +64,14 @@ module Fluent
         timestamp: time,
         line: record['message'] || record.to_json
       }
+      # At least one of "file" or "app" is required.
+      line[:file] = record['file']
+      line[:file] ||= @file if @file
+      line.delete(:file) if line[:file].nil?
       line[:app] = record['_app'] || record['app']
       line[:app] ||= @app if @app
       line.delete(:app) if line[:app].nil?
+
       line[:meta] = record['meta']
       line.delete(:meta) if line[:meta].nil?
       line
