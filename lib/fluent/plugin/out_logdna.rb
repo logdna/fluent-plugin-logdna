@@ -8,6 +8,7 @@ module Fluent
     MAX_RETRIES = 5
 
     config_param :api_key, :string, secret: true
+    config_param :ingestion_host, :string, default: 'https://logs.logdna.com'
     config_param :hostname, :string
     config_param :mac, :string, default: nil
     config_param :ip, :string, default: nil
@@ -24,7 +25,7 @@ module Fluent
       require 'base64'
       require 'http'
       HTTP.default_options = { :keep_alive_timeout => 60 }
-      @ingester = HTTP.persistent INGESTER_DOMAIN
+      @ingester = HTTP.persistent @ingestion_host
       @requests = Queue.new
     end
 
