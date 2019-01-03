@@ -67,6 +67,8 @@ module Fluent
       line[:app] = record['_app'] || record['app']
       line[:app] ||= @app if @app
       line.delete(:app) if line[:app].nil?
+      line[:env] = record['env']
+      line.delete(:env) if line[:env].nil?
       line[:meta] = record['meta']
       line.delete(:meta) if line[:meta].nil?
       line
