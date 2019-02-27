@@ -52,6 +52,20 @@ logdna register <email>
 
 Our [paid plans](https://logdna.com/#pricing) start at $1.25/GB per month, pay for what you use / no fixed data buckets / all paid plans include all features.
 
+## Building a debian package for td-agent
+If you use td-agent you can build a debian package instead of installing via
+td-agent-gem. This requires that td-agent is already installed and that you've
+installed [fpm](http://fpm.readthedocs.io/en/latest/index.html). Then just run
+`make` in your git directory.
+
+```
+gem install --no-ri --no-rdoc fpm
+git clone https://github.com/logdna/fluent-plugin-logdna
+cd fluent-plugin-logdna
+make
+sudo dpkg -i fluent-plugin-logdna*.deb
+```
+
 ## Additional Options
 
 For advanced configuration options, please refer to the [buffered output parameters documentation.](http://docs.fluentd.org/articles/output-plugin-overview#buffered-output-parameters)

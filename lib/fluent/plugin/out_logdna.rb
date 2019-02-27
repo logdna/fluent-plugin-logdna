@@ -4,15 +4,15 @@ module Fluent
   class LogDNAOutput < Fluent::BufferedOutput
     Fluent::Plugin.register_output('logdna', self)
 
-    INGESTER_DOMAIN = 'https://logs.logdna.com'.freeze
     MAX_RETRIES = 5
 
     config_param :api_key, :string, secret: true
-    config_param :ingestion_host, :string, default: 'https://logs.logdna.com'
     config_param :hostname, :string
     config_param :mac, :string, default: nil
     config_param :ip, :string, default: nil
     config_param :app, :string, default: nil
+    config_param :file, :string, default: nil
+    config_param :ingester_domain, :string, default: 'https://logs.logdna.com'
 
     def configure(conf)
       super
@@ -25,7 +25,7 @@ module Fluent
       require 'base64'
       require 'http'
       HTTP.default_options = { :keep_alive_timeout => 60 }
-      @ingester = HTTP.persistent @ingestion_host
+      @ingester = HTTP.persistent @ingester_domain
       @requests = Queue.new
     end
 
@@ -62,11 +62,16 @@ module Fluent
       line = {
         level: record['level'] || record['severity'] || tag.split('.').last,
         timestamp: time,
-        line: record['message'] || record.to_json
+        line: record.to_json
       }
+      # At least one of "file" or "app" is required.
+      line[:file] = record['file']
+      line[:file] ||= @file if @file
+      line.delete(:file) if line[:file].nil?
       line[:app] = record['_app'] || record['app']
       line[:app] ||= @app if @app
       line.delete(:app) if line[:app].nil?
+
       line[:meta] = record['meta']
       line.delete(:meta) if line[:meta].nil?
       line
