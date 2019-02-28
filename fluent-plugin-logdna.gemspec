@@ -3,7 +3,7 @@ require 'date'
 
 Gem::Specification.new do |s|
   s.name        = 'fluent-plugin-logdna'
-  s.version     = '0.1.7'
+  s.version     = '0.1.7.1'
   s.date        = Date.today.to_s
   s.summary     = 'LogDNA plugin for Fluentd'
   s.description = 'Fluentd plugin for supplying output to LogDNA.'
@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files -z`.split("\x0")
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.required_ruby_version = Gem::Requirement.new('>= 2.0.0')
+  s.add_development_dependency "bundler", "~> 1.16"
   s.add_runtime_dependency 'fluentd', '>= 0.12.0', '< 2'
   s.add_runtime_dependency 'http', '~> 2.0', '>= 2.0.3'
 end
