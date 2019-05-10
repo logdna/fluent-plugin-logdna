@@ -53,7 +53,7 @@ logdna register <email>
 
 ### LogDNA Pay-per-gig Pricing
 
-Our [paid plans](https://logdna.com/#pricing) start at $1.25/GB per month, pay for what you use / no fixed data buckets / all paid plans include all features.
+Our [paid plans](https://logdna.com/pricing/) start at $1.25/GB per month, pay for what you use / no fixed data buckets / all paid plans include all features.
 
 ## Building a debian package for td-agent
 If you use td-agent you can build a debian package instead of installing via
