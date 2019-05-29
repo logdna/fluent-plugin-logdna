@@ -9,6 +9,7 @@ module Fluent
     config_param :api_key, :string, secret: true
     config_param :hostname, :string
     config_param :mac, :string, default: nil
+    config_param :tags, :string, default: nil
     config_param :ip, :string, default: nil
     config_param :app, :string, default: nil
     config_param :file, :string, default: nil
@@ -80,7 +81,7 @@ module Fluent
 
     def send_request(body)
       now = Time.now.to_i
-      url = "/logs/ingest?hostname=#{@host}&mac=#{@mac}&ip=#{@ip}&now=#{now}"
+      url = "/logs/ingest?hostname=#{@host}&mac=#{@mac}&ip=#{@ip}&now=#{now}&tags=#{@tags}"
       @ingester.headers('apikey' => @api_key,
                         'content-type' => 'application/json')
                .post(url, json: body)
