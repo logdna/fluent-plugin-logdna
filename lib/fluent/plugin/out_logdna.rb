@@ -13,6 +13,8 @@ module Fluent
     config_param :app, :string, default: nil
     config_param :file, :string, default: nil
     config_param :ingester_domain, :string, default: 'https://logs.logdna.com'
+    config_param :proxy_host, :string, default: nil
+    config_param :proxy_port, :integer, default: 8080
 
     def configure(conf)
       super
@@ -25,7 +27,11 @@ module Fluent
       require 'base64'
       require 'http'
       HTTP.default_options = { :keep_alive_timeout => 60 }
-      @ingester = HTTP.persistent @ingester_domain
+      unless @proxy_host.nil?
+        @ingester = HTTP.via(@proxy_host, @proxy_port).persistent @ingester_domain
+      else
+        @ingester = HTTP.persistent @ingester_domain
+      end
       @requests = Queue.new
     end
 
