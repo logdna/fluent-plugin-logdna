@@ -84,7 +84,8 @@ module Fluent
       url = "/logs/ingest?hostname=#{@host}&mac=#{@mac}&ip=#{@ip}&now=#{now}&tags=#{@tags}"
       @ingester.headers('apikey' => @api_key,
                         'content-type' => 'application/json')
-               .post(url, json: body)
+                .timeout(connect: 10, write: 10, read: 10)
+                .post(url, json: body)
     end
   end
 end
