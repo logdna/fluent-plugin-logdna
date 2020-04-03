@@ -5,7 +5,7 @@ require 'fluent/test/driver/output'
 require 'fluent/plugin/out_stdout'
 require 'fluent/plugin/input'
 require 'webmock/test_unit'
-include WebMock
+include WebMock::API
 
 require 'lib/fluent/plugin/out_logdna.rb'
 
@@ -30,11 +30,32 @@ class LogdnaOutputTest < Test::Unit::TestCase
     Fluent::Test::Driver::Output.new(Fluent::LogDNAOutput).configure(conf)
   end
 
-  test 'instantiate the plugin and check tags field' do
+  test 'instantiate the plugin and check default config values' do
     d = create_driver
     time = event_time
-    assert_equal 'my-tag', d.instance.tags
 
+    # check defaults
+    assert_equal 'https://logs.logdna.com', d.instance.ingester_domain
+    assert_equal 30, d.instance.request_timeout_seconds
+  end
+
+  test 'instantiate the plugin and check setting config values' do
+    conf = %[
+        api_key this-is-my-key
+        hostname "localhost"
+        app my_app
+        mac C0:FF:EE:C0:FF:EE
+        ip 127.0.0.1
+        tags  "my-tag"
+        request_timeout_seconds 17
+      ]
+
+    d = create_driver(conf)
+    time = event_time
+
+    # check set config values
+    assert_equal 'my-tag', d.instance.tags
+    assert_equal 17, d.instance.request_timeout_seconds
   end
 
   test 'simple #write' do

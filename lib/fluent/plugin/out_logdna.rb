@@ -14,6 +14,7 @@ module Fluent
     config_param :app, :string, default: nil
     config_param :file, :string, default: nil
     config_param :ingester_domain, :string, default: 'https://logs.logdna.com'
+    config_param :request_timeout_seconds, :integer, default: 30
 
     def configure(conf)
       super
@@ -84,7 +85,7 @@ module Fluent
       url = "/logs/ingest?hostname=#{@host}&mac=#{@mac}&ip=#{@ip}&now=#{now}&tags=#{@tags}"
       @ingester.headers('apikey' => @api_key,
                         'content-type' => 'application/json')
-                .timeout(connect: 10, write: 10, read: 10)
+                .timeout(connect: @request_timeout_seconds, write: request_timeout_seconds, read: request_timeout_seconds)
                 .post(url, json: body)
     end
   end
