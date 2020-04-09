@@ -30,32 +30,69 @@ class LogdnaOutputTest < Test::Unit::TestCase
     Fluent::Test::Driver::Output.new(Fluent::LogDNAOutput).configure(conf)
   end
 
-  test 'instantiate the plugin and check default config values' do
-    d = create_driver
-    time = event_time
+  sub_test_case 'configuration' do
+    test 'instantiate the plugin and check default config values' do
+        d = create_driver
+        time = event_time
 
-    # check defaults
-    assert_equal 'https://logs.logdna.com', d.instance.ingester_domain
-    assert_equal 30, d.instance.request_timeout_seconds
-  end
+        # check defaults
+        assert_equal 'https://logs.logdna.com', d.instance.ingester_domain
+        assert_equal 30, d.instance.request_timeout
+    end
 
-  test 'instantiate the plugin and check setting config values' do
-    conf = %[
-        api_key this-is-my-key
-        hostname "localhost"
-        app my_app
-        mac C0:FF:EE:C0:FF:EE
-        ip 127.0.0.1
-        tags  "my-tag"
-        request_timeout_seconds 17
-      ]
+    test 'instantiate the plugin and check setting config values' do
+        conf = %[
+            api_key this-is-my-key
+            hostname "localhost"
+            app my_app
+            mac C0:FF:EE:C0:FF:EE
+            ip 127.0.0.1
+            tags  "my-tag"
+            request_timeout 17s
+        ]
 
-    d = create_driver(conf)
-    time = event_time
+        d = create_driver(conf)
 
-    # check set config values
-    assert_equal 'my-tag', d.instance.tags
-    assert_equal 17, d.instance.request_timeout_seconds
+        # check set config values
+        assert_equal 'my-tag', d.instance.tags
+        assert_equal 17, d.instance.request_timeout
+    end
+
+    test 'instantiate the plugin with ms request_timeout value' do
+
+        conf = %[
+            api_key this-is-my-key
+            hostname "localhost"
+            app my_app
+            mac C0:FF:EE:C0:FF:EE
+            ip 127.0.0.1
+            tags  "my-tag"
+            request_timeout 17000 ms
+        ]
+
+        d = create_driver(conf)
+
+        # check set config values
+        assert_equal 17, d.instance.request_timeout
+    end
+
+    test 'instantiate the plugin with nonesense request_timeout value' do
+
+        conf = %[
+            api_key this-is-my-key
+            hostname "localhost"
+            app my_app
+            mac C0:FF:EE:C0:FF:EE
+            ip 127.0.0.1
+            tags  "my-tag"
+            request_timeout "asdf ms"
+        ]
+
+        d = create_driver(conf)
+
+        # check set config values
+        assert_equal 30, d.instance.request_timeout
+    end
   end
 
   test 'simple #write' do
