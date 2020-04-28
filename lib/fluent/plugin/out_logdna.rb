@@ -20,10 +20,20 @@ module Fluent
       super
       @host = conf['hostname']
 
-      timeout_match = @request_timeout.match(/[0-9]*/)[0]
-      timeout = timeout_match == "" ? 30 : timeout_match.to_i
-      ms_match = @request_timeout.include? "ms"
-      @request_timeout = ms_match && timeout_match != "" ? timeout / 1000 : timeout
+      # make these two variables globals
+      timeout_unit_map = { s: 1.0, ms: 0.001  }
+      timeout_regex = Regexp.new("^([0-9]+)\s*(#{timeout_unit_map.keys.join("|")})$")
+
+      # this section goes into this part of the code
+      num_component = 30.0
+      unit_component = 's'
+
+      timeout_regex.match(@request_timeout) do |match|
+        num_component = match[1].to_f
+        unit_component = match[2]
+      end
+
+      @request_timeout = num_component * timeout_unit_map[unit_component.to_sym]
     end
 
     def start
