@@ -23,6 +23,7 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
   request_timeout 30000 ms                   # optional timeout for upload request, supports seconds (s, default) and milliseconds (ms) suffixes, default 30 seconds
   buffer_chunk_limit 1m                      # do not increase past 8m (8MB) or your logs will be rejected by our server.
   flush_at_shutdown true                     # only needed with file buffer
+  # ingester_domain https://logs.us-south.logging.cloud.ibm.com                    # which ingestion endpoint to send logs to, default https://logs.logdna.com
 </match>
 ~~~~~
 
