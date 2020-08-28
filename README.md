@@ -6,67 +6,63 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
 
 ## Instructions
 
-* Install [Fluentd](http://www.fluentd.org/download)
-* Alternative install if using fluentd package manager (td-agent): `td-agent-gem install fluent-plugin-logdna`
-* Add the contents below to `/etc/fluent/fluent.conf`. For td-agent, use `/etc/td-agent/td-agent.conf`:
-* Alternative install without td-agent is: `gem install fluent-plugin-logdna`
+* Install Fluentd
+  * [Download here](http://www.fluentd.org/download)
+  * If using fluentd package manager (td-agent): `td-agent-gem install fluent-plugin-logdna`
+  * To install without td-agent: `gem install fluent-plugin-logdna`
+* Add the config below to `/etc/fluent/fluent.conf`. For td-agent, `/etc/td-agent/td-agent.conf`:
+
+## Configuration
+
+### Configuration Parameters
+- `api_key`: [Ingestion Key](https://docs.logdna.com/docs/ingestion-key), *Required*
+- `hostname`: Hostname, *Required*
+- `app`: App Name, *Optional*
+- `mac`: MAC Address, *Optional*
+- `ip`: IP Address, *Optional*
+- `tags`: Comma-Separated List of Tags, *Optional*
+- `request_timeout`: HTTPS POST Request Timeout, *Optional*
+  - **Note**: Supports `s` and `ms` Suffices
+  - **Default**: `30 s`
+- `ingester_domain`: Custom Ingester URL, *Optional*
+  - **Default**: `htttps://logs.logdna.com`
+
+### Sample Configuration
 
 ~~~~~configuration
 <match **>
   @type logdna
-  api_key xxxxxxxxxxxxxxxxxxxxxxxxxxx        # paste your api key here (required)
-  hostname "#{Socket.gethostname}"           # your hostname (required)
-  app my_app                                 # replace with your app name
-  #mac C0:FF:EE:C0:FF:EE                     # optional mac address
-  #ip 127.0.0.1                              # optional ip address
-  #tags web,dev                              # optional tags
-  request_timeout 30000 ms                   # optional timeout for upload request, supports seconds (s, default) and milliseconds (ms) suffixes, default 30 seconds
-  buffer_chunk_limit 1m                      # do not increase past 8m (8MB) or your logs will be rejected by our server.
-  flush_at_shutdown true                     # only needed with file buffer
+  api_key xxxxxxxxxxxxxxxxxxxxxxxxxxx
+  hostname "#{Socket.gethostname}"
+  app my_app
+  mac C0:FF:EE:C0:FF:EE
+  ip 127.0.0.1
+  tags web,dev
+  request_timeout 30000 ms
+  ingester_domain https://logs.logdna.com
 </match>
 ~~~~~
 
-* Restart fluentd to pick up the configuration changes.
-* `sudo /etc/init.d/td-agent stop`
-* `sudo /etc/init.d/td-agent start`
+## Line Parameters
 
-### Recommended Configuration Parameters
-
-* buffer_type
-  * We recommend setting this to memory for development and file for production (file setting requires a buffer_path).
-* buffer_queue_limit, buffer_chunk_limit
-  * We do not recommend increasing buffer_chunk_limit past 8MB.
-* flush_interval
-  * Default is 60s. We recommend keeping this well above 5s.
-* retry_wait, max_retry_wait, retry_limit, disable_retry_limit
-  * We recommend increasing these values if you are encountering problems.
-
-### Options
-
-* App name and log level can also be provided on a line-by-line basis over JSON:
-* `_app` and `level` will override the config
-
-If you don't have a LogDNA account, you can create one on [https://logdna.com](https://logdna.com) or if you're on macOS w/[Homebrew](https://brew.sh) installed:
-
-~~~~~bash
-brew cask install logdna-cli
-logdna register <email>
-# now paste the api key above
-~~~~~
+The following line parameters can be set to the information coming from each `record` object:
+- `level`: [Level](https://github.com/logdna/logger-node#supported-log-levels): `record['level']` or `record['severity']` or the last `tag` given in each `record`
+- `file`: File Name: set to `file` given in each `record`
+- `app`: App Name: set to either `_app` or `app` given in each `record`
+  - **Default**: `app` given in the configuration
+- `env`: Environment Name: set to `env` given in each `record`
+- `meta`: Meta Object: set to `meta` given in each `record`
 
 ### LogDNA Pay-per-gig Pricing
 
-Our [paid plans](https://logdna.com/#pricing) start at $1.25/GB per month, pay for what you use / no fixed data buckets / all paid plans include all features.
+Our [paid plans](https://logdna.com/pricing/) start at $1.25/GB per month, and it's based only on usage.  There are no fixed data buckets and all paid plans include all features.
 
 ## Building a debian package for td-agent
 
-If you use td-agent you can build a debian package instead of installing via
-td-agent-gem. This requires that td-agent is already installed and that you've
-installed [fpm](http://fpm.readthedocs.io/en/latest/index.html). Then just run
-`make` in your git directory.
+If you use td-agent you can build a debian package instead of installing via `td-agent-gem`. This requires that td-agent is already installed and that you've installed [fpm](http://fpm.readthedocs.io/en/latest/index.html). Then run `make` in your git directory.
 
 ~~~~~bash
-gem install --no-ri --no-rdoc fpm
+gem install --no-document fpm
 git clone https://github.com/logdna/fluent-plugin-logdna
 cd fluent-plugin-logdna
 make
@@ -78,3 +74,5 @@ sudo dpkg -i fluent-plugin-logdna*.deb
 For advanced configuration options, please refer to the [buffered output parameters documentation.](http://docs.fluentd.org/articles/output-plugin-overview#buffered-output-parameters)
 
 Questions or concerns? Contact [support@logdna.com](mailto:support@logdna.com).
+
+Contributions are always welcome. See the [contributing guide](/CONTRIBUTING.md) to learn how you can help.
