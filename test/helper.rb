@@ -1,4 +1,6 @@
-$LOAD_PATH.unshift(File.expand_path("../../", __FILE__))
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift(File.expand_path("..", __dir__))
 require "test-unit"
 require "fluent/test"
 require "fluent/test/driver/output"
