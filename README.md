@@ -67,7 +67,13 @@ If you use td-agent you can build a debian package instead of installing via `td
 gem install --no-document fpm
 git clone https://github.com/logdna/fluent-plugin-logdna
 cd fluent-plugin-logdna
-make
+gem build fluent-plugin-logdna.gemspec
+fpm --input-type gem --output-type deb \
+    --no-auto-depends \
+    --no-gem-fix-name \
+    --depends 'td-agent > 2' \
+    --deb-build-depends 'td-agent > 2' \
+    fluent-plugin-logdna-*.gem
 sudo dpkg -i fluent-plugin-logdna*.deb
 ~~~~~
 
