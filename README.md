@@ -71,7 +71,7 @@ sudo dpkg -i fluent-plugin-logdna*.deb
 
 ## Additional Options
 
-For advanced configuration options, please refer to the [buffered output parameters documentation.] (https://docs.fluentd.org/v/0.12/output#buffered-output-parameters)
+For advanced configuration options, please refer to the [buffered output parameters documentation.](https://docs.fluentd.org/v/0.12/output#buffered-output-parameters)
 
 Questions or concerns? Contact [support@logdna.com](mailto:support@logdna.com).
 
