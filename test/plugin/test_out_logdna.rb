@@ -38,6 +38,7 @@ class LogdnaOutputTest < Test::Unit::TestCase
         # check defaults
         assert_equal 'https://logs.logdna.com', d.instance.ingester_domain
         assert_equal 30, d.instance.request_timeout
+        assert_equal '/logs/ingest', d.instance.ingester_endpoint
     end
 
     test 'instantiate the plugin and check setting config values' do
@@ -49,6 +50,7 @@ class LogdnaOutputTest < Test::Unit::TestCase
             ip 127.0.0.1
             tags  "my-tag"
             request_timeout 17s
+            ingester_endpoint this/is/my/alternate/endpoint
         ]
 
         d = create_driver(conf)
@@ -56,6 +58,7 @@ class LogdnaOutputTest < Test::Unit::TestCase
         # check set config values
         assert_equal 'my-tag', d.instance.tags
         assert_equal 17, d.instance.request_timeout
+        assert_equal 'this/is/my/alternate/endpoint', d.instance.ingester_endpoint
     end
 
     test 'instantiate the plugin with ms request_timeout value' do

@@ -26,6 +26,8 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
   - **Default**: `30 s`
 - `ingester_domain`: Custom Ingester URL, *Optional*
   - **Default**: `htttps://logs.logdna.com`
+- `ingester_endpoint`: Custom Ingester Endpoint, *Optional*
+  - **Default**: `/logs/ingest`
 
 ### Sample Configuration
 
