@@ -9,18 +9,29 @@ test_build_filters: &test_build_filters
     only: /.*/
   tags:
     ignore: /v[0-9]+\.[0-9]+\.[0-9]+/
-jobs:
-  test:
+executors:
+  releaser:
+    docker:
+      - image: circleci/golang:1.12
+  ruby265:
     docker:
       - image: circleci/ruby:2.6.5
+  ruby23:
+    docker:
+      - image: circleci/ruby:2.3
+jobs:
+  test:
+    parameters:
+      ruby:
+        type: executor
+    executor: << parameters.ruby >>
     steps:
       - checkout
       - run: bundle install
       - run: rubocop -c .rubocop.yml
       - run: rake test
   build:
-    docker:
-      - image: circleci/ruby:2.6.5
+    executor: ruby265
     steps:
       - checkout
       - run:
@@ -39,8 +50,7 @@ jobs:
           paths:
             - ./fluent-plugin-logdna-*.gem
   release:
-    docker:
-      - image: circleci/golang:1.12
+    executor: releaser
     steps:
       - attach_workspace:
           at: .
@@ -68,8 +78,7 @@ jobs:
           paths:
             - ./fluent-plugin-logdna-*.gem
   publish:
-    docker:
-      - image: circleci/ruby:2.6.5
+    executor: ruby265
     steps:
       - attach_workspace:
           at: .
@@ -87,6 +96,9 @@ workflows:
   update:
     jobs:
       - test:
+          matrix:
+            parameters:
+              ruby: [ruby23, ruby265]
           filters: *tagged_build_filters
       - build:
           requires:
@@ -108,4 +120,7 @@ workflows:
   test:
     jobs:
       - test:
+          matrix:
+            parameters:
+              ruby: [ruby23, ruby265]
           filters: *test_build_filters

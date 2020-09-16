@@ -6,11 +6,14 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
 
 ## Instructions
 
+* Requirements:
+  * `ruby >= 2.3`
+  * `fluentd < 2.0`
 * Install Fluentd
   * [Download here](http://www.fluentd.org/download)
   * If using fluentd package manager (td-agent): `td-agent-gem install fluent-plugin-logdna`
   * To install without td-agent: `gem install fluent-plugin-logdna`
-* Add the config below to `/etc/fluent/fluent.conf`. For td-agent, `/etc/td-agent/td-agent.conf`:
+* Add the config below to `/etc/fluent/fluent.conf`. For `td-agent`, `/etc/td-agent/td-agent.conf`:
 
 ## Configuration
 
