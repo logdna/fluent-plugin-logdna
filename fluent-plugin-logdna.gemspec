@@ -4,7 +4,7 @@ require "date"
 
 Gem::Specification.new do |s|
   s.name        = "fluent-plugin-logdna"
-  s.version     = "0.3.1"
+  s.version     = "0.4.0"
   s.date        = Date.today.to_s
   s.summary     = "LogDNA Plugin for Fluentd"
   s.description = "Fluentd Plugin for Supplying Output to LogDNA."
