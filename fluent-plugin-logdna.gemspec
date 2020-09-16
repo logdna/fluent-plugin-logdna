@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.files         = `git ls-files -z`.split("\x0")
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  s.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
+  s.required_ruby_version = Gem::Requirement.new(">= 2.3")
   s.add_runtime_dependency "fluentd", ">= 0.12.0", "< 2"
   s.add_runtime_dependency "http", "~> 2.0", ">= 2.0.3"
   s.add_development_dependency "bundler", "~> 1.16"
