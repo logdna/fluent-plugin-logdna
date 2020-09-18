@@ -28,7 +28,7 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
   - **Note**: Supports `s` and `ms` Suffices
   - **Default**: `30 s`
 - `ingester_domain`: Custom Ingester URL, *Optional*
-  - **Default**: `htttps://logs.logdna.com`
+  - **Default**: `https://logs.logdna.com`
 - `ingester_endpoint`: Custom Ingester Endpoint, *Optional*
   - **Default**: `/logs/ingest`
 
@@ -45,6 +45,7 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
   tags web,dev
   request_timeout 30000 ms
   ingester_domain https://logs.logdna.com
+  ingester_endpoint /logs/ingest
 </match>
 ~~~~~
 
@@ -71,7 +72,8 @@ gem install --no-document fpm
 git clone https://github.com/logdna/fluent-plugin-logdna
 cd fluent-plugin-logdna
 gem build fluent-plugin-logdna.gemspec
-fpm --input-type gem --output-type deb \
+fpm --input-type gem \
+    --output-type deb \
     --no-auto-depends \
     --no-gem-fix-name \
     --depends 'td-agent > 2' \
