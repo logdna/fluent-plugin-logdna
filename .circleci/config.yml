@@ -59,7 +59,7 @@ jobs:
           name: Create a Release
           command: |
             ghr \
-              -n "LogDNA Ruby Logger ${CIRCLE_TAG}" \
+              -n "LogDNA Fluentd Plugin ${CIRCLE_TAG}" \
               -t ${GITHUB_TOKEN} \
               -u ${CIRCLE_PROJECT_USERNAME} \
               -r ${CIRCLE_PROJECT_REPONAME} \
