@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 require "set"
+require "rake/clean"
+require "rake/testtask"
 
 # Directory to place gems to bundle with our main gem
 PACKAGE_DIR = "pkg"
-require "rake/clean"
 CLOBBER.include PACKAGE_DIR
 
 desc "Copies gem dependencies to the #{PACKAGE_DIR} folder"
@@ -12,14 +15,14 @@ end
 
 desc "Copies gem dependencies which don't overlap with td-agent to the #{PACKAGE_DIR} folder"
 task "gemdep:minimal" do
-  MINIMAL_GEMS = %W[
+  MINIMAL_GEMS = %w[
     unf_ext
     unf
     domain_name
     http-cookie
     http-form_data
     http
-  ]
+  ].freeze
   gem_copy gen_gem_list MINIMAL_GEMS
 end
 
@@ -28,12 +31,11 @@ def gen_gem_list(subset = [])
   to_pull = Set[]
   Bundler.locked_gems.specs.each do |spec|
     next if spec.name == myself.name
+
     if subset.empty?
       to_pull.add(spec)
-    else
-      if subset.include? spec.name
-        to_pull.add(spec)
-      end
+    elsif subset.include? spec.name
+      to_pull.add(spec)
     end
   end
   to_pull
@@ -43,6 +45,10 @@ end
 # Bundler.app_cache with the gems of dependencies).
 def gem_copy(specs)
   Bundler.mkdir_p PACKAGE_DIR
-  sources = specs.collect { |s| Bundler.app_cache.join "#{s.full_name}.gem" }
-  FileUtils.cp sources, PACKAGE_DIR, :verbose => true
+  sources = specs.map { |s| Bundler.app_cache.join "#{s.full_name}.gem" }
+  FileUtils.cp sources, PACKAGE_DIR, verbose: true
+end
+
+Rake::TestTask.new do |task|
+  task.pattern = "test/**/*.rb"
 end
