@@ -85,7 +85,7 @@ For advanced configuration options, please refer to the [buffered output paramet
 
 # fluent-plugin-logdna Windows Version
 
-##Install Fluentd
+## Install Fluentd
 
 On Windows Server (2008 or newer), install the FluentD’s td-agent [here](https://docs.fluentd.org/installation/install-by-msi#td-agent-v4), or run this command in PowerShell:
 
@@ -93,7 +93,7 @@ On Windows Server (2008 or newer), install the FluentD’s td-agent [here](https
 Invoke-WebRequest -Uri "http://packages.treasuredata.com.s3.amazonaws.com/4/windows/td-agent-4.0.0-x64.msi" -Outfile td-agent.msi ; & .\td-agent.msi /passive
 ```
 
-##Configure Fluentd
+## Configure Fluentd
 
 1. Head to where FluentD is installed – by default, it's in `C:\opt\td-agent\etc\td-agent\`
 
@@ -108,7 +108,7 @@ Invoke-WebRequest -Uri "http://packages.treasuredata.com.s3.amazonaws.com/4/wind
 6. Finally, save the changes you've made to your td-agent.conf file.
 
 
-##Install the [LogDNA Fluentd plugin](https://github.com/logdna/fluent-plugin-logdna)
+## Install the [LogDNA Fluentd plugin](https://github.com/logdna/fluent-plugin-logdna)
 
 Run this command in PowerShell
 
@@ -116,7 +116,7 @@ Run this command in PowerShell
 Start-Process cmd "/c C:\opt\td-agent\bin\td-agent-gem install fluent-plugin-logdna"
 ```
 
-##Start FluentD
+## Start FluentD
 
 Run this command in PowerShell
 ```
@@ -127,7 +127,7 @@ Now, check your LogDNA account to see that it’s sending logs.
 
 If logs aren’t showing up in your account, check the td-agent prompt to see what the configuration problem might be. Please contact [support@logdna.com](mailto:support@logdna.com), and let us know what you see.
 
-##Our FluentD Configuration
+## Our FluentD Configuration
 
 ```
 <source>
