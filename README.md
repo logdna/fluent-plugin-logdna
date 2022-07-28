@@ -133,20 +133,20 @@ If logs aren’t showing up in your account, check the td-agent prompt to see wh
 <source>
   @type windows_eventlog2
   @id windows_eventlog2
-  channels application,system # Also be able to use `<subscribe>` directive.
+  channels application,system 		# Also be able to use `<subscribe>` directive.
   read_existing_events false
   read_interval 2
   tag winevt.raw
-  render_as_xml true   	# default is false.
-  rate_limit 200        	# default is -1(Winevt::EventLog::Subscribe::RATE_INFINITE).
-  # preserve_qualifiers_on_hash true # default is false.
+  render_as_xml true   			# default is false.
+  rate_limit 200        		# default is -1(Winevt::EventLog::Subscribe::RATE_INFINITE).
+  # preserve_qualifiers_on_hash true 	# default is false.
   # read_all_channels false # default is false.
   # description_locale en_US # default is nil. It means that system locale is used for obtaining description.
   <storage>
-	@type local         	# @type local is the default.
-	persistent true     	# default is true. Set to false to use in-memory storage.
-	path ./tmp/storage.json # This is required when persistent is true.
-                        	# Or, please consider using <system> section's `root_dir` parameter.
+	@type local         		# @type local is the default.
+	persistent true     		# default is true. Set to false to use in-memory storage.
+	path ./tmp/storage.json 	# This is required when persistent is true.
+                        		# Or, please consider using <system> section's `root_dir` parameter.
   </storage>
   <parse>
 	@type winevt_xml # @type winevt_xml is the default. winevt_xml and none parsers are supported for now.
@@ -164,17 +164,17 @@ If logs aren’t showing up in your account, check the td-agent prompt to see wh
  
 <match **>
   @type logdna
-  api_key xxxxxxxxxxxxxxxxxxxxxxxxxxx	# paste your api key here (required)
+  api_key xxxxxxxxxxxxxxxxxxxxxxxxxxx		# paste your api key here (required)
   ingester_domain https://logs.logdna.com	#Replace with your specific LogDNA endpoint
   hostname "#{Socket.gethostname}"		#your hostname (required)
   app my_app                   			# replace with your app name
   #mac C0:FF:EE:C0:FF:EE                 	# optional mac address
-  #ip 127.0.0.1                          		# optional ip address
-  #tags web,dev                          		# optional tags
+  #ip 127.0.0.1                          	# optional ip address
+  #tags web,dev                          	# optional tags
   slow_flush_log_threshold 30.0
   request_timeout 30000 ms               	# optional timeout for upload request, supports seconds (s, default) and milliseconds (ms) suffixes, default 30 seconds
-  buffer_chunk_limit 1m                  		# do not increase past 8m (8MB) or your logs will be rejected by our server.
-  flush_at_shutdown true                 		# only needed with file buffer
+  buffer_chunk_limit 1m                  	# do not increase past 8m (8MB) or your logs will be rejected by our server.
+  flush_at_shutdown true                 	# only needed with file buffer
 </match>
 
 
