@@ -97,7 +97,7 @@ Invoke-WebRequest -Uri "http://packages.treasuredata.com.s3.amazonaws.com/4/wind
 
 1. Head to where FluentD is installed – by default, it's in `C:\opt\td-agent\etc\td-agent\`
 
-2. Copy and paste [our configuration template](#our-fluentd-configuration) from the end of this page into the existing td-agent.conf file.
+2. Copy and paste [our configuration template](#our-fluentd-configuration) from the end of this page into the existing `td-agent.conf` file.
 
 3. On the line with `channels, application, system`, you can include one or more of `{'application', 'system', 'setup', 'security'}`. If you want to read 'setup' or 'security' logs, you must launch FluentD with administrator privileges.
 
