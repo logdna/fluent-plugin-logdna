@@ -150,8 +150,8 @@ If logs aren’t showing up in your account, check the td-agent prompt to see wh
   </storage>
   <parse>
 	@type winevt_xml # @type winevt_xml is the default. winevt_xml and none parsers are supported for now.
-	# When set up it as true, this plugin preserves "Qualifiers" and "EventID" keys.
-	# When set up it as false, this plugin calculates actual "EventID" from "Qualifiers" and removing "Qualifiers".
+	# When set up as true, this plugin preserves "Qualifiers" and "EventID" keys.
+	# When set up as false, this plugin calculates actual "EventID" from "Qualifiers" and removing "Qualifiers".
 	# With the following equation:
 	# (EventID & 0xffff) | (Qualifiers & 0xffff) << 16
 	preserve_qualifiers true
