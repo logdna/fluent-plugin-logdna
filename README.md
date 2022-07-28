@@ -95,7 +95,7 @@ Invoke-WebRequest -Uri "http://packages.treasuredata.com.s3.amazonaws.com/4/wind
 
 ## Configure Fluentd
 
-1. Head to where FluentD is installed – by default, it's in `C:\opt\td-agent\etc\td-agent\`
+1. Navigate to where FluentD is installed – by default, it's in `C:\opt\td-agent\etc\td-agent\`
 
 2. Copy and paste [our configuration template](#our-fluentd-configuration) from the end of this page into the existing `td-agent.conf` file.
 
@@ -140,8 +140,8 @@ If logs aren’t showing up in your account, check the td-agent prompt to see wh
   render_as_xml true   			# default is false.
   rate_limit 200        		# default is -1(Winevt::EventLog::Subscribe::RATE_INFINITE).
   # preserve_qualifiers_on_hash true 	# default is false.
-  # read_all_channels false # default is false.
-  # description_locale en_US # default is nil. It means that system locale is used for obtaining description.
+  # read_all_channels false 		# default is false.
+  # description_locale en_US 		# default is nil. It means that system locale is used for obtaining description.
   <storage>
 	@type local         		# @type local is the default.
 	persistent true     		# default is true. Set to false to use in-memory storage.
