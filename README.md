@@ -1,10 +1,12 @@
-# fluent-plugin-logdna Gem Version
+# fluent-plugin-logdna
 
 [![Gem Version](https://badge.fury.io/rb/fluent-plugin-logdna.svg)](https://badge.fury.io/rb/fluent-plugin-logdna)
 
 Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to LogDNA.
 
-## Instructions
+## Installation
+
+### Using RubyGems
 
 * Requirements:
   * `ruby >= 2.3`
@@ -15,9 +17,9 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
   * To install without td-agent: `gem install fluent-plugin-logdna`
 * Add the config below to `/etc/fluent/fluent.conf`. For `td-agent`, `/etc/td-agent/td-agent.conf`:
 
-## Configuration
+#### Configuration
 
-### Configuration Parameters
+##### Configuration Parameters
 - `api_key`: [Ingestion Key](https://docs.logdna.com/docs/ingestion-key), *Required*
 - `hostname`: Hostname, *Required*
 - `app`: App Name, *Optional*
@@ -32,7 +34,7 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
 - `ingester_endpoint`: Custom Ingester Endpoint, *Optional*
   - **Default**: `/logs/ingest`
 
-### Sample Configuration
+##### Sample Configuration
 
 ~~~~~configuration
 <match **>
@@ -49,7 +51,7 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
 </match>
 ~~~~~
 
-## Line Parameters
+#### Line Parameters
 
 The following line parameters can be set to the information coming from each `record` object:
 - `level`: [Level](https://github.com/logdna/logger-node#supported-log-levels): `record['level']` or `record['severity']` or the last `tag` given in each `record`
@@ -60,7 +62,7 @@ The following line parameters can be set to the information coming from each `re
 - `meta`: Meta Object: set to `meta` given in each `record`
 
 
-## Building a debian package for td-agent
+### Using td-agent
 
 If you use td-agent you can build a debian package instead of installing via `td-agent-gem`. This requires that td-agent is already installed and that you've installed [fpm](http://fpm.readthedocs.io/en/latest/index.html). Then run `make` in your git directory.
 
@@ -79,13 +81,11 @@ fpm --input-type gem \
 sudo dpkg -i fluent-plugin-logdna*.deb
 ~~~~~
 
-## Additional Options
+#### Additional Options
 
 For advanced configuration options, please refer to the [buffered output parameters documentation.](https://docs.fluentd.org/v/0.12/output#buffered-output-parameters)
 
-# fluent-plugin-logdna Windows Version
-
-## Install Fluentd
+### Using FPM
 
 On Windows Server (2008 or newer), install the FluentD’s td-agent [here](https://docs.fluentd.org/installation/install-by-msi#td-agent-v4), or run this command in PowerShell:
 
@@ -93,7 +93,7 @@ On Windows Server (2008 or newer), install the FluentD’s td-agent [here](https
 Invoke-WebRequest -Uri "http://packages.treasuredata.com.s3.amazonaws.com/4/windows/td-agent-4.0.0-x64.msi" -Outfile td-agent.msi ; & .\td-agent.msi /passive
 ```
 
-## Configure Fluentd
+#### Configure Fluentd
 
 1. Navigate to where FluentD is installed – by default, it's in `C:\opt\td-agent\etc\td-agent\`
 
@@ -108,7 +108,7 @@ Invoke-WebRequest -Uri "http://packages.treasuredata.com.s3.amazonaws.com/4/wind
 6. Finally, save the changes you've made to your td-agent.conf file.
 
 
-## Install the [LogDNA Fluentd plugin](https://github.com/logdna/fluent-plugin-logdna)
+#### Install the [LogDNA Fluentd plugin](https://github.com/logdna/fluent-plugin-logdna)
 
 Run this command in PowerShell
 
@@ -116,7 +116,7 @@ Run this command in PowerShell
 Start-Process cmd "/c C:\opt\td-agent\bin\td-agent-gem install fluent-plugin-logdna"
 ```
 
-## Start FluentD
+##### Start FluentD
 
 Run this command in PowerShell
 ```
@@ -127,7 +127,7 @@ Now, check your LogDNA account to see that it’s sending logs.
 
 If logs aren’t showing up in your account, check the td-agent prompt to see what the configuration problem might be. Please contact [support@logdna.com](mailto:support@logdna.com), and let us know what you see.
 
-## Our FluentD Configuration
+#### Our FluentD Configuration
 
 ```
 <source>
