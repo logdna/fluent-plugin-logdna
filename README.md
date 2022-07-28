@@ -108,7 +108,7 @@ Invoke-WebRequest -Uri "http://packages.treasuredata.com.s3.amazonaws.com/4/wind
 6. Finally, save the changes you've made to your td-agent.conf file.
 
 
-#### Install the [LogDNA Fluentd plugin](https://github.com/logdna/fluent-plugin-logdna)
+#### Install the [LogDNA Fluentd plugin](logdna/fluent-plugin-logdna)
 
 Run this command in PowerShell
 
