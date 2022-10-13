@@ -59,10 +59,6 @@ The following line parameters can be set to the information coming from each `re
 - `env`: Environment Name: set to `env` given in each `record`
 - `meta`: Meta Object: set to `meta` given in each `record`
 
-### LogDNA Pay-per-gig Pricing
-
-Our [paid plans](https://logdna.com/pricing/) start at $1.25/GB per month, and it's based only on usage.  There are no fixed data buckets and all paid plans include all features.
-
 ## Building a debian package for td-agent
 
 If you use td-agent you can build a debian package instead of installing via `td-agent-gem`. This requires that td-agent is already installed and that you've installed [fpm](http://fpm.readthedocs.io/en/latest/index.html). Then run `make` in your git directory.
