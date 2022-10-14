@@ -43,6 +43,8 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
   mac C0:FF:EE:C0:FF:EE
   ip 127.0.0.1
   tags web,dev
+  proxy_host myproxyserver
+  proxy_port 8080
   request_timeout 30000 ms
   ingester_domain https://logs.logdna.com
   ingester_endpoint /logs/ingest
