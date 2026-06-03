@@ -39,6 +39,7 @@ class LogdnaOutputTest < Test::Unit::TestCase
     # check defaults
     assert_equal "https://logs.logdna.com", d.instance.ingester_domain
     assert_equal 30, d.instance.request_timeout
+    assert_equal 8 * 1024 * 1024, d.instance.payload_size
   end
 
   test "instantiate the plugin and check setting config values" do
@@ -105,5 +106,45 @@ class LogdnaOutputTest < Test::Unit::TestCase
     end
 
     assert_equal(2, d.formatted.size)
+  end
+
+  test "chunk_to_bodies splits into multiple payloads when payload_size is exceeded" do
+    conf = CONFIG + "\npayload_size 10"
+    d = create_driver(conf)
+
+    assert_equal 10, d.instance.payload_size
+
+    time = event_time
+    record = { "foo" => "bar", "message" => "myLine" }
+    lines = [
+      d.instance.send(:gather_line_data, "output.test", time, record),
+      d.instance.send(:gather_line_data, "output.test", time, record),
+      d.instance.send(:gather_line_data, "output.test", time, record)
+    ]
+
+    # Simulate a chunk by building a fake object that yields the lines
+    fake_chunk = Object.new
+    fake_chunk.define_singleton_method(:msgpack_each) do |&block|
+      lines.each { |l| block.call(["output.test", time, record]) }
+    end
+
+    bodies = d.instance.send(:chunk_to_bodies, fake_chunk)
+    assert bodies.length > 1, "Expected multiple bodies due to small payload_size"
+    bodies.each { |b| assert b[:lines].length >= 1 }
+  end
+
+  test "chunk_to_bodies returns a single payload when within payload_size" do
+    d = create_driver
+    time = event_time
+    record = { "foo" => "bar", "message" => "myLine" }
+
+    fake_chunk = Object.new
+    fake_chunk.define_singleton_method(:msgpack_each) do |&block|
+      3.times { block.call(["output.test", time, record]) }
+    end
+
+    bodies = d.instance.send(:chunk_to_bodies, fake_chunk)
+    assert_equal 1, bodies.length
+    assert_equal 3, bodies.first[:lines].length
   end
 end

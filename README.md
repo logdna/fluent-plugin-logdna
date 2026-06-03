@@ -31,6 +31,8 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
   - **Default**: `https://logs.logdna.com`
 - `ingester_endpoint`: Custom Ingester Endpoint, *Optional*
   - **Default**: `/logs/ingest`
+- `payload_size`: Maximum POST body size in bytes; chunk is split into multiple requests if exceeded, *Optional*
+  - **Default**: `2097152` (2 MB)
 
 ### Sample Configuration
 
@@ -46,6 +48,7 @@ Using fluent-plugin-logdna, you can send the logs you collect with Fluentd to Lo
   request_timeout 30000 ms
   ingester_domain https://logs.logdna.com
   ingester_endpoint /logs/ingest
+  payload_size 2097152
 </match>
 ~~~~~
 

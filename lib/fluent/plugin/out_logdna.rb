@@ -18,6 +18,7 @@ module Fluent
     config_param :ingester_domain, :string, default: "https://logs.logdna.com"
     config_param :ingester_endpoint, :string, default: "/logs/ingest"
     config_param :request_timeout, :string, default: "30"
+    config_param :payload_size, :integer, default: 2 * 1024 * 1024
 
     def configure(conf)
       super
@@ -59,24 +60,38 @@ module Fluent
     end
 
     def write(chunk)
-      body = chunk_to_body(chunk)
-      response = send_request(body)
-      raise "Encountered server error" if response.code >= 400
+      chunk_to_bodies(chunk).each do |body|
+        response = send_request(body)
+        raise "Encountered server error" if response.code >= 400
 
-      response.flush
+        response.flush
+      end
     end
 
     private
 
-    def chunk_to_body(chunk)
-      data = []
+    def chunk_to_bodies(chunk)
+      bodies = []
+      current_lines = []
+      current_size = 0
 
       chunk.msgpack_each do |(tag, time, record)|
         line = gather_line_data(tag, time, record)
-        data << line unless line[:line].empty?
+        next if line[:line].empty?
+
+        line_size = line.to_json.bytesize
+        if current_size + line_size > @payload_size && !current_lines.empty?
+          bodies << { lines: current_lines }
+          current_lines = []
+          current_size = 0
+        end
+
+        current_lines << line
+        current_size += line_size
       end
 
-      { lines: data }
+      bodies << { lines: current_lines } unless current_lines.empty?
+      bodies
     end
 
     def gather_line_data(tag, time, record)
